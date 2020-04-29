@@ -16,12 +16,15 @@ namespace NewsHeli
 		// vehicle
 		public bool isActive;
 		public Vehicle activeHeli;
-		public Ped activePilot;
-		public Ped activePaparazzi;
 		private string _modelName;
 		private Model _model;
 		private float _altitude;
 		private float _radius;
+
+		// crew
+		public Ped activePilot;
+		public Ped activePaparazzi;
+		private RelationshipGroup _newsRG;
 
 		// Camera
 		private float _defaultFov;
@@ -41,6 +44,9 @@ namespace NewsHeli
 		{
 			readNewsHeliSettings(ss);
 			_model = (Model)Game.GenerateHash(_modelName);
+			_newsRG = new RelationshipGroup(Game.GenerateHash("news_team")); //RelationshipGroup("news_team");
+			//_newsRG.SetRelationshipBetweenGroups(Game.Player.Character.RelationshipGroup, Relationship.Companion, true);
+			Game.Player.Character.RelationshipGroup.SetRelationshipBetweenGroups(_newsRG, Relationship.Like, true);
 			isRenderingFromHeliCam = false;
 		}
 		#endregion
@@ -84,8 +90,7 @@ namespace NewsHeli
 			activeHeli = World.CreateVehicle(_model, spawnPos);
 			activeHeli.IsEngineRunning = true;
 			activeHeli.HeliBladesSpeed = 1.0f;
-			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, PedHash.ReporterCutscene);
-			activePaparazzi = activeHeli.CreatePedOnSeat(VehicleSeat.Passenger, PedHash.Beverly);
+			spawnAndConfigureHeliCrew();
 
 			// task activePilot with chasing the player
 			taskPilotChasePlayer(activePilot);
@@ -179,6 +184,17 @@ namespace NewsHeli
 
 			section = "HeliCam";
 			_defaultFov = ss.GetValue<float>(section, "defaultFov", 60f);
+		}
+
+
+
+
+		private void spawnAndConfigureHeliCrew()
+		{
+			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, PedHash.ReporterCutscene);
+			activePilot.RelationshipGroup = _newsRG;
+			activePaparazzi = activeHeli.CreatePedOnSeat(VehicleSeat.Passenger, PedHash.Beverly);
+			activePaparazzi.RelationshipGroup = _newsRG;
 		}
 
 
