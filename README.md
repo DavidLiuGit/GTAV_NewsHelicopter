@@ -21,7 +21,7 @@ Setting | Function | Default
 ---|---|---
 **NewsHeli**|
 `onWanted` | spawn news chopper with 3 or more wanted stars? Currently there is no way to spawn one manually, so leave as `true` | `true`
-`model` | helicopter model to be spawned | `frogger`
+`model` | helicopter model to be spawned. You can use add-on model names | `frogger`
 `radius` | how far away the helicopter should follow the player from, in meters | `40` meters
 `altitude` | how high the helicopter should be above the player, in meters | `40` meters
 **HeliCam**|
@@ -30,6 +30,9 @@ Setting | Function | Default
 
 
 ## Development
+
+[Source code - GitHub](https://github.com/DavidLiuGit/GTAV_NewsHelicopter)  
+[GTA5 Mods](https://www.gta5-mods.com/scripts/news-helicopter)
 
 ### Planned features
 - ability to zoom in/out on the camera feed
