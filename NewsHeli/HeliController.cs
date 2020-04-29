@@ -135,12 +135,26 @@ namespace NewsHeli
 		/// </summary>
 		public void toggleHeliCam()
 		{
+			// sanity check: if no heli is active, stop execution
+			if (!isActive)
+			{
+				instanceDestructor();
+				return;
+			}
+
+			// if currently rendering from heli cam, then reset to gameplay cam
 			if (isRenderingFromHeliCam){
 				World.RenderingCamera = null;
 				isRenderingFromHeliCam = false;
 			}
+
+			// if notcurrently rendering from heli cam, then set heli cam as active rendering cam
 			else
 			{
+				// if heli cam does not exist (deleted for some reason), reinitialize it
+				if (!heliCam.Exists())
+					initializeHeliCamera(activeHeli);
+
 				World.RenderingCamera = heliCam;
 				isRenderingFromHeliCam = true;
 			}
