@@ -26,8 +26,10 @@ namespace NewsHeli
 		{
 			Tick += onTick;
 			KeyDown += onKeyDown;
-			Interval = 1;
+			Interval = 999;
+			Aborted += onAbort;
 		}
+
 
 
 		private void onTick(object sender, EventArgs e)
@@ -36,22 +38,43 @@ namespace NewsHeli
 			{
 				GTA.UI.Notification.Show(ModName + " by " + Developer + " Loaded");
 				firstTime = false;
+
+				// initialization
 				_ss = base.Settings;
+				_enabledOnWanted = _ss.GetValue<bool>("NewsHeli", "onWanted", true);
+				_heliCtrl = new HeliController(_ss);
+				_toggleCamKey = _ss.GetValue<Keys>("HeliCam", "activateKey", Keys.Return);
 			}
 
 
+			if (_heliCtrl.isActive)
+				_heliCtrl.onTick();
 
+			else if (Game.Player.WantedLevel >= 3 && _enabledOnWanted)
+				_heliCtrl.spawnMannedHeliInPursuit();
 		}
 
 
 		private void onKeyDown(object sender, KeyEventArgs e)
 		{
-
+			if (_heliCtrl.isActive)
+			{
+				if (e.KeyCode == _toggleCamKey)
+					_heliCtrl.toggleHeliCam();
+			}
 		}
 
 
+		private void onAbort(object sender, EventArgs e)
+		{
+			_heliCtrl.instanceDestructor(true);
+		}
+
+
+
+		private bool _enabledOnWanted = true;
 		private ScriptSettings _ss;
 		private HeliController _heliCtrl;
-
+		private Keys _toggleCamKey;
 	}
 }
