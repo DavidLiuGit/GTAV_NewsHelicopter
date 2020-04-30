@@ -41,6 +41,8 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
-
+#### 1.0.1
+- shifted the camera mounting position further forward
+- heli now dismissed if player loses wanted level
 #### 1.0
 - initial release
