@@ -219,9 +219,15 @@ namespace NewsHeli
 		/// <returns>instance of <c>Camera</c></returns>
 		private Camera initializeHeliCamera(Vehicle heli)
 		{
+			// create camera
 			Camera cam = World.CreateCamera(Vector3.Zero, Vector3.Zero, _defaultFov);
-			Vector3 offset = Vector3.Zero;
-			offset.Z -= 1.0f;
+
+			// determine the offset from center to mount the camera
+			// Dimensions = (Item1: rearBottomLeft, Item2: frontTopRight)
+			ValueTuple<Vector3, Vector3> heliDimensions = heli.Model.Dimensions;
+			Vector3 offset = new Vector3(0f, heliDimensions.Item2.Y / 2, heliDimensions.Item1.Z);
+
+			// configure camera
 			cam.AttachTo(heli, offset);
 			cam.PointAt(Game.Player.Character);
 			return cam;
