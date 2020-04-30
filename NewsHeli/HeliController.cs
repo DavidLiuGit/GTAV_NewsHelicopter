@@ -124,6 +124,7 @@ namespace NewsHeli
 			{
 				heliCam.Delete();
 				activePaparazzi.MarkAsNoLongerNeeded();
+				activePilot.Task.FleeFrom(Game.Player.Character);
 				activePilot.MarkAsNoLongerNeeded();
 				activeHeli.MarkAsNoLongerNeeded();
 			}
