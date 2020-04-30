@@ -46,12 +46,24 @@ namespace NewsHeli
 				_toggleCamKey = _ss.GetValue<Keys>("HeliCam", "activateKey", Keys.Return);
 			}
 
-
+			
+			// if a heli is already active:
 			if (_heliCtrl.isActive)
-				_heliCtrl.onTick();
+			{
+				if (_enabledOnWanted)
+				{
+					if (Game.Player.WantedLevel >= 3)
+						_heliCtrl.onTick();
+					else _heliCtrl.instanceDestructor(false);	// if player has less than 3 stars, dismiss active heli
+				}
+			}
 
-			else if (Game.Player.WantedLevel >= 3 && _enabledOnWanted)
-				_heliCtrl.spawnMannedHeliInPursuit();
+			// if no heli is active
+			else
+			{
+				if (_enabledOnWanted && Game.Player.WantedLevel >= 3)
+					_heliCtrl.spawnMannedHeliInPursuit();
+			}
 		}
 
 

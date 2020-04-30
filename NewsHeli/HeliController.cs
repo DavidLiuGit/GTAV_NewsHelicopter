@@ -16,12 +16,15 @@ namespace NewsHeli
 		// vehicle
 		public bool isActive;
 		public Vehicle activeHeli;
-		public Ped activePilot;
-		public Ped activePaparazzi;
 		private string _modelName;
 		private Model _model;
 		private float _altitude;
 		private float _radius;
+
+		// crew
+		public Ped activePilot;
+		public Ped activePaparazzi;
+		private RelationshipGroup _newsRG;
 
 		// Camera
 		private float _defaultFov;
@@ -41,6 +44,9 @@ namespace NewsHeli
 		{
 			readNewsHeliSettings(ss);
 			_model = (Model)Game.GenerateHash(_modelName);
+			_newsRG = new RelationshipGroup(Game.GenerateHash("news_team")); //RelationshipGroup("news_team");
+			//_newsRG.SetRelationshipBetweenGroups(Game.Player.Character.RelationshipGroup, Relationship.Companion, true);
+			Game.Player.Character.RelationshipGroup.SetRelationshipBetweenGroups(_newsRG, Relationship.Like, true);
 			isRenderingFromHeliCam = false;
 		}
 		#endregion
@@ -84,8 +90,7 @@ namespace NewsHeli
 			activeHeli = World.CreateVehicle(_model, spawnPos);
 			activeHeli.IsEngineRunning = true;
 			activeHeli.HeliBladesSpeed = 1.0f;
-			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, PedHash.ReporterCutscene);
-			activePaparazzi = activeHeli.CreatePedOnSeat(VehicleSeat.Passenger, PedHash.Beverly);
+			spawnAndConfigureHeliCrew();
 
 			// task activePilot with chasing the player
 			taskPilotChasePlayer(activePilot);
@@ -183,6 +188,17 @@ namespace NewsHeli
 
 
 
+
+		private void spawnAndConfigureHeliCrew()
+		{
+			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, PedHash.ReporterCutscene);
+			activePilot.RelationshipGroup = _newsRG;
+			activePaparazzi = activeHeli.CreatePedOnSeat(VehicleSeat.Passenger, PedHash.Beverly);
+			activePaparazzi.RelationshipGroup = _newsRG;
+		}
+
+
+
 		/// <summary>
 		/// Task the specified pilot of a helicopter with chasing the Player
 		/// </summary>
@@ -203,9 +219,15 @@ namespace NewsHeli
 		/// <returns>instance of <c>Camera</c></returns>
 		private Camera initializeHeliCamera(Vehicle heli)
 		{
+			// create camera
 			Camera cam = World.CreateCamera(Vector3.Zero, Vector3.Zero, _defaultFov);
-			Vector3 offset = Vector3.Zero;
-			offset.Z -= 1.0f;
+
+			// determine the offset from center to mount the camera
+			// Dimensions = (Item1: rearBottomLeft, Item2: frontTopRight)
+			ValueTuple<Vector3, Vector3> heliDimensions = heli.Model.Dimensions;
+			Vector3 offset = new Vector3(0f, heliDimensions.Item2.Y / 2, heliDimensions.Item1.Z);
+
+			// configure camera
 			cam.AttachTo(heli, offset);
 			cam.PointAt(Game.Player.Character);
 			return cam;
