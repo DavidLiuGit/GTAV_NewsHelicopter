@@ -180,11 +180,11 @@ namespace NewsHeli
 		{
 			string section = "NewsHeli";
 			_modelName = ss.GetValue<string>(section, "model", "frogger");
-			_radius = ss.GetValue<float>(section, "radius", 40f);
-			_altitude = ss.GetValue<float>(section, "altitude", 40f);
+			_radius = ss.GetValue<float>(section, "radius", 50f);
+			_altitude = ss.GetValue<float>(section, "altitude", 50f);
 
 			section = "HeliCam";
-			_defaultFov = ss.GetValue<float>(section, "defaultFov", 60f);
+			_defaultFov = ss.GetValue<float>(section, "defaultFov", 50f);
 		}
 
 
