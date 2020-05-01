@@ -14,7 +14,8 @@ Move `NewsHeli.dll` and `NewsHeli.ini` to your `/scripts` directory
 
 ## Usage
 The news heli will spawn automatically when you have 3 or more stars wanted level.  
-Press `[Enter]` (can be changed in INI) to toggle the news chopper camera feed.
+Press `[Enter]` (can be changed in INI) to toggle the news chopper camera feed.  
+Press `Ctrl` and `+` or `-` to zoom camera feed in/out, respectively. Same as zooming a web browser.
 
 ### Settings
 Setting | Function | Default
@@ -27,20 +28,23 @@ Setting | Function | Default
 **HeliCam**|
 `activateKey` | Key used to toggle the news chopper camera feed | `Enter` (return carriage)
 `defaultFov` | Default field-of-view for the news chopper camera feed, in degrees | `60` degrees
+`zoomFactor` | Percentage to zoom camera by every time you press the zoom command | `10` %
 
 
 ## Development
-
 [Source code - GitHub](https://github.com/DavidLiuGit/GTAV_NewsHelicopter)  
 [GTA5 Mods](https://www.gta5-mods.com/scripts/news-helicopter)
 
 ### Planned features
-- ability to zoom in/out on the camera feed
 - ability to apply filters to camera feed
 - gracefully transition from gameplay cam to camera feed
 - community suggestions!
 
 ### Changelog
+#### 1.1
+- heli pilot now flies away when dismissed
+- implemented zoom in/out heli camera feed
+- increased script tick rate to make it more responsive
 #### 1.0.1
 - shifted the camera mounting position further forward
 - heli now dismissed if player loses wanted level
