@@ -31,6 +31,7 @@ namespace NewsHeli
 		private float _currentFov;
 		public Camera heliCam;
 		public bool isRenderingFromHeliCam;
+		private float _zoomFactor;
 		#endregion
 
 
@@ -165,6 +166,33 @@ namespace NewsHeli
 				isRenderingFromHeliCam = true;
 			}
 		}
+
+
+
+		/// <summary>
+		/// Modify the field-of-view of the camera, effectively zooming the camera in or out.
+		/// No action is taken if the camera is NOT currently rendering
+		/// </summary>
+		/// <param name="zoomIn">If <c>true</c>, zoom in. If false, zoom out</param>
+		/// <returns>The updated field-of-view of the camera</returns>
+		public float zoomCamera(bool zoomIn, bool verbose = false)
+		{
+			// if heli camera is not currently rendering, do nothing
+			if (World.RenderingCamera != heliCam)
+				return _currentFov;
+
+			// compute the new camera field-of-view
+			if (zoomIn)
+				_currentFov *= 1f - _zoomFactor;
+			else
+				_currentFov *= 1f + _zoomFactor;
+			
+			// apply new camera fov
+			heliCam.FieldOfView = _currentFov;
+			if (verbose) GTA.UI.Screen.ShowHelpTextThisFrame("News Heli Cam FOV: " + _currentFov + " degrees");
+
+			return _currentFov;
+		}
 		#endregion
 
 
@@ -185,11 +213,14 @@ namespace NewsHeli
 
 			section = "HeliCam";
 			_defaultFov = ss.GetValue<float>(section, "defaultFov", 50f);
+			_zoomFactor = ss.GetValue<float>(section, "zoomFactor", 10f) / 100f;
 		}
 
 
 
-
+		/// <summary>
+		/// Spawn the crew of the heli, and apply configurations to the Peds
+		/// </summary>
 		private void spawnAndConfigureHeliCrew()
 		{
 			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, PedHash.ReporterCutscene);
@@ -222,6 +253,7 @@ namespace NewsHeli
 		{
 			// create camera
 			Camera cam = World.CreateCamera(Vector3.Zero, Vector3.Zero, _defaultFov);
+			_currentFov = _defaultFov;
 
 			// determine the offset from center to mount the camera
 			// Dimensions = (Item1: rearBottomLeft, Item2: frontTopRight)

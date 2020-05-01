@@ -26,7 +26,7 @@ namespace NewsHeli
 		{
 			Tick += onTick;
 			KeyDown += onKeyDown;
-			Interval = 999;
+			Interval = 199;
 			Aborted += onAbort;
 		}
 
@@ -71,8 +71,18 @@ namespace NewsHeli
 		{
 			if (_heliCtrl.isActive)
 			{
+				// if the toggle camera key was pressed:
 				if (e.KeyCode == _toggleCamKey)
 					_heliCtrl.toggleHeliCam();
+
+				// if control key also pressed:
+				else if (e.Modifiers == Keys.Control)
+				{
+					if (e.KeyCode == Keys.Oemplus)
+						_heliCtrl.zoomCamera(true);
+					else if (e.KeyCode == Keys.OemMinus)
+						_heliCtrl.zoomCamera(false);
+				}
 			}
 		}
 
