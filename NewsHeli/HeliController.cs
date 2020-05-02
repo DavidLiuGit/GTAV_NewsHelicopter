@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using GTA;
 using GTA.Math;
+using GTA.UI;
 
 
 namespace NewsHeli
@@ -32,6 +33,9 @@ namespace NewsHeli
 		public Camera heliCam;
 		public bool isRenderingFromHeliCam;
 		private float _zoomFactor;
+
+		// debug
+		private bool _verbose = false;
 		#endregion
 
 
@@ -146,6 +150,7 @@ namespace NewsHeli
 			if (!isActive)
 			{
 				instanceDestructor();
+				if (_verbose) Notification.Show("while toggling heli cam, heli was NOT active");
 				return;
 			}
 
@@ -160,7 +165,10 @@ namespace NewsHeli
 			{
 				// if heli cam does not exist (deleted for some reason), reinitialize it
 				if (!heliCam.Exists())
-					initializeHeliCamera(activeHeli);
+				{
+					heliCam = initializeHeliCamera(activeHeli);
+					if (_verbose) Notification.Show("while toggling heli cam, heli cam did not exist! Initializing now");
+				}
 
 				World.RenderingCamera = heliCam;
 				isRenderingFromHeliCam = true;
@@ -178,7 +186,7 @@ namespace NewsHeli
 		public float zoomCamera(bool zoomIn, bool verbose = false)
 		{
 			// if heli camera is not currently rendering, do nothing
-			if (World.RenderingCamera != heliCam)
+			if (!isRenderingFromHeliCam)
 				return _currentFov;
 
 			// compute the new camera field-of-view
@@ -214,6 +222,9 @@ namespace NewsHeli
 			section = "HeliCam";
 			_defaultFov = ss.GetValue<float>(section, "defaultFov", 50f);
 			_zoomFactor = ss.GetValue<float>(section, "zoomFactor", 10f) / 100f;
+
+			section = "debug";
+			_verbose = ss.GetValue<bool>(section, "verbose", false);
 		}
 
 
