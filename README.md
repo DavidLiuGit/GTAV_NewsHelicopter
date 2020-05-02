@@ -41,6 +41,8 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.1.1
+- fixed a bug where the camera would not zoom after the heli is destroyed in rare cases
 #### 1.1
 - heli pilot now flies away when dismissed
 - implemented zoom in/out heli camera feed
