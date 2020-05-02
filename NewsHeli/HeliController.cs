@@ -183,7 +183,7 @@ namespace NewsHeli
 		/// </summary>
 		/// <param name="zoomIn">If <c>true</c>, zoom in. If false, zoom out</param>
 		/// <returns>The updated field-of-view of the camera</returns>
-		public float zoomCamera(bool zoomIn, bool verbose = false)
+		public float zoomCamera(bool zoomIn)
 		{
 			// if heli camera is not currently rendering, do nothing
 			if (!isRenderingFromHeliCam)
@@ -197,7 +197,7 @@ namespace NewsHeli
 			
 			// apply new camera fov
 			heliCam.FieldOfView = _currentFov;
-			if (verbose) GTA.UI.Screen.ShowHelpTextThisFrame("News Heli Cam FOV: " + _currentFov + " degrees");
+			if (_verbose) GTA.UI.Screen.ShowHelpTextThisFrame("News Heli Cam FOV: " + _currentFov + " degrees");
 
 			return _currentFov;
 		}
