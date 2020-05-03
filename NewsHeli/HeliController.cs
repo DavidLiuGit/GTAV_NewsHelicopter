@@ -24,7 +24,7 @@ namespace NewsHeli
 
 		// crew
 		public Ped activePilot;
-		public Ped activePaparazzi;
+		private const PedHash _defaultPilotHash = PedHash.Beverly;
 		private RelationshipGroup _newsRG;
 
 		// Camera
@@ -93,6 +93,15 @@ namespace NewsHeli
 
 			// spawn the heli & activePilot
 			activeHeli = World.CreateVehicle(_model, spawnPos);
+
+			// error checking
+			if (activeHeli == null)
+			{
+				Notification.Show("News Heli: ~r~Failed to spawn heli " + _modelName);
+				return activeHeli;
+			}
+
+			// configure heli
 			activeHeli.IsEngineRunning = true;
 			activeHeli.HeliBladesSpeed = 1.0f;
 			spawnAndConfigureHeliCrew();
@@ -118,7 +127,6 @@ namespace NewsHeli
 			// if destroying by force, delete everything right away
 			if (force)
 			{
-				activePaparazzi.Delete();
 				activePilot.Delete();
 				heliCam.Delete();
 				activeHeli.Delete();
@@ -128,7 +136,6 @@ namespace NewsHeli
 			else
 			{
 				heliCam.Delete();
-				activePaparazzi.MarkAsNoLongerNeeded();
 				activePilot.Task.FleeFrom(Game.Player.Character);
 				activePilot.MarkAsNoLongerNeeded();
 				activeHeli.MarkAsNoLongerNeeded();
@@ -234,10 +241,10 @@ namespace NewsHeli
 		/// </summary>
 		private void spawnAndConfigureHeliCrew()
 		{
-			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, PedHash.ReporterCutscene);
+			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, _defaultPilotHash);
 			activePilot.RelationshipGroup = _newsRG;
-			activePaparazzi = activeHeli.CreatePedOnSeat(VehicleSeat.Passenger, PedHash.Beverly);
-			activePaparazzi.RelationshipGroup = _newsRG;
+			if (activePilot == null)
+				Notification.Show("News Heli: ~r~Failed to spawn heli pilot " + _defaultPilotHash.ToString());
 		}
 
 
@@ -266,8 +273,15 @@ namespace NewsHeli
 			Camera cam = World.CreateCamera(Vector3.Zero, Vector3.Zero, _defaultFov);
 			_currentFov = _defaultFov;
 
+			// error checking
+			if (cam == null)
+			{
+				Notification.Show("News Heli: ~r~Failed to create camera for News Heli");
+				return cam;
+			}
+
 			// determine the offset from center to mount the camera
-			// Dimensions = (Item1: rearBottomLeft, Item2: frontTopRight)
+			// Model.Dimensions: (Item1: rearBottomLeft, Item2: frontTopRight)
 			ValueTuple<Vector3, Vector3> heliDimensions = heli.Model.Dimensions;
 			Vector3 offset = new Vector3(0f, heliDimensions.Item2.Y / 2, heliDimensions.Item1.Z);
 
