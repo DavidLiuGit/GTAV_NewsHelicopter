@@ -42,6 +42,7 @@ Setting | Function | Default
 
 ### Changelog
 #### 1.1.1
+- added error checking after spawning heli & crew
 - fixed a bug where the camera would not zoom after the heli is destroyed in rare cases
 #### 1.1
 - heli pilot now flies away when dismissed
