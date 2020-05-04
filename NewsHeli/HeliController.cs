@@ -27,6 +27,10 @@ namespace NewsHeli
 		private const PedHash _defaultPilotHash = PedHash.Beverly;
 		private RelationshipGroup _newsRG;
 
+		// tasking
+		private const int _chaseRetaskTicks = 20;
+		private int _tickCount = 0;
+
 		// Camera
 		private float _defaultFov;
 		private float _currentFov;
@@ -76,7 +80,12 @@ namespace NewsHeli
 				return;
 			}
 
-			taskPilotChasePlayer(activePilot);
+			// retask the pilot's chase if tickCount is a multiple of _chaseRetaskTicks constant
+			if (_tickCount % _chaseRetaskTicks == 0)
+				taskPilotChasePlayer(activePilot);
+
+			// increment tickCount
+			_tickCount++;
 		}
 
 
