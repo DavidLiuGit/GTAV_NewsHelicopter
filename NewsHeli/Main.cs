@@ -62,7 +62,11 @@ namespace NewsHeli
 			else
 			{
 				if (_enabledOnWanted && Game.Player.WantedLevel >= 3)
-					_heliCtrl.spawnMannedHeliInPursuit();
+				{
+					Vehicle heli = _heliCtrl.spawnMannedHeliInPursuit();
+					if (heli == null) _enabledOnWanted = false;
+				}
+					
 			}
 		}
 

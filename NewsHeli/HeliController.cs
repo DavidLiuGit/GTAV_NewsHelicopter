@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using GTA;
 using GTA.Math;
+using GTA.UI;
 
 
 namespace NewsHeli
@@ -23,7 +24,7 @@ namespace NewsHeli
 
 		// crew
 		public Ped activePilot;
-		public Ped activePaparazzi;
+		private const PedHash _defaultPilotHash = PedHash.Beverly;
 		private RelationshipGroup _newsRG;
 
 		// Camera
@@ -32,6 +33,9 @@ namespace NewsHeli
 		public Camera heliCam;
 		public bool isRenderingFromHeliCam;
 		private float _zoomFactor;
+
+		// debug
+		private bool _verbose = false;
 		#endregion
 
 
@@ -89,6 +93,15 @@ namespace NewsHeli
 
 			// spawn the heli & activePilot
 			activeHeli = World.CreateVehicle(_model, spawnPos);
+
+			// error checking
+			if (activeHeli == null)
+			{
+				Notification.Show("News Heli: ~r~Failed to spawn heli " + _modelName);
+				return activeHeli;
+			}
+
+			// configure heli
 			activeHeli.IsEngineRunning = true;
 			activeHeli.HeliBladesSpeed = 1.0f;
 			spawnAndConfigureHeliCrew();
@@ -114,7 +127,6 @@ namespace NewsHeli
 			// if destroying by force, delete everything right away
 			if (force)
 			{
-				activePaparazzi.Delete();
 				activePilot.Delete();
 				heliCam.Delete();
 				activeHeli.Delete();
@@ -124,7 +136,6 @@ namespace NewsHeli
 			else
 			{
 				heliCam.Delete();
-				activePaparazzi.MarkAsNoLongerNeeded();
 				activePilot.Task.FleeFrom(Game.Player.Character);
 				activePilot.MarkAsNoLongerNeeded();
 				activeHeli.MarkAsNoLongerNeeded();
@@ -146,6 +157,7 @@ namespace NewsHeli
 			if (!isActive)
 			{
 				instanceDestructor();
+				if (_verbose) Notification.Show("while toggling heli cam, heli was NOT active");
 				return;
 			}
 
@@ -160,7 +172,10 @@ namespace NewsHeli
 			{
 				// if heli cam does not exist (deleted for some reason), reinitialize it
 				if (!heliCam.Exists())
-					initializeHeliCamera(activeHeli);
+				{
+					heliCam = initializeHeliCamera(activeHeli);
+					if (_verbose) Notification.Show("while toggling heli cam, heli cam did not exist! Initializing now");
+				}
 
 				World.RenderingCamera = heliCam;
 				isRenderingFromHeliCam = true;
@@ -175,10 +190,10 @@ namespace NewsHeli
 		/// </summary>
 		/// <param name="zoomIn">If <c>true</c>, zoom in. If false, zoom out</param>
 		/// <returns>The updated field-of-view of the camera</returns>
-		public float zoomCamera(bool zoomIn, bool verbose = false)
+		public float zoomCamera(bool zoomIn)
 		{
 			// if heli camera is not currently rendering, do nothing
-			if (World.RenderingCamera != heliCam)
+			if (!isRenderingFromHeliCam)
 				return _currentFov;
 
 			// compute the new camera field-of-view
@@ -189,7 +204,7 @@ namespace NewsHeli
 			
 			// apply new camera fov
 			heliCam.FieldOfView = _currentFov;
-			if (verbose) GTA.UI.Screen.ShowHelpTextThisFrame("News Heli Cam FOV: " + _currentFov + " degrees");
+			if (_verbose) GTA.UI.Screen.ShowHelpTextThisFrame("News Heli Cam FOV: " + _currentFov + " degrees");
 
 			return _currentFov;
 		}
@@ -214,6 +229,9 @@ namespace NewsHeli
 			section = "HeliCam";
 			_defaultFov = ss.GetValue<float>(section, "defaultFov", 50f);
 			_zoomFactor = ss.GetValue<float>(section, "zoomFactor", 10f) / 100f;
+
+			section = "debug";
+			_verbose = ss.GetValue<bool>(section, "verbose", false);
 		}
 
 
@@ -223,10 +241,10 @@ namespace NewsHeli
 		/// </summary>
 		private void spawnAndConfigureHeliCrew()
 		{
-			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, PedHash.ReporterCutscene);
+			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, _defaultPilotHash);
 			activePilot.RelationshipGroup = _newsRG;
-			activePaparazzi = activeHeli.CreatePedOnSeat(VehicleSeat.Passenger, PedHash.Beverly);
-			activePaparazzi.RelationshipGroup = _newsRG;
+			if (activePilot == null)
+				Notification.Show("News Heli: ~r~Failed to spawn heli pilot " + _defaultPilotHash.ToString());
 		}
 
 
@@ -255,8 +273,15 @@ namespace NewsHeli
 			Camera cam = World.CreateCamera(Vector3.Zero, Vector3.Zero, _defaultFov);
 			_currentFov = _defaultFov;
 
+			// error checking
+			if (cam == null)
+			{
+				Notification.Show("News Heli: ~r~Failed to create camera for News Heli");
+				return cam;
+			}
+
 			// determine the offset from center to mount the camera
-			// Dimensions = (Item1: rearBottomLeft, Item2: frontTopRight)
+			// Model.Dimensions: (Item1: rearBottomLeft, Item2: frontTopRight)
 			ValueTuple<Vector3, Vector3> heliDimensions = heli.Model.Dimensions;
 			Vector3 offset = new Vector3(0f, heliDimensions.Item2.Y / 2, heliDimensions.Item1.Z);
 
