@@ -26,7 +26,7 @@ namespace NewsHeli
 		{
 			Tick += onTick;
 			KeyDown += onKeyDown;
-			Interval = 199;
+			Interval = 99;
 			Aborted += onAbort;
 		}
 
@@ -68,6 +68,21 @@ namespace NewsHeli
 				}
 					
 			}
+
+
+			// detect gamepad input
+			if (_heliCtrl.isActive && Game.IsControlJustPressed(_gamepadActivate))
+			{
+				// toggle camera
+				if (Game.IsControlPressed(_gamepadModifier))
+					_heliCtrl.toggleHeliCam();
+
+				// zoom control
+				else if (Game.IsControlPressed(GTA.Control.LookUpOnly))
+					_heliCtrl.zoomCamera(true);
+				else if (Game.IsControlPressed(GTA.Control.LookDownOnly))
+					_heliCtrl.zoomCamera(false);
+			}
 		}
 
 
@@ -102,5 +117,9 @@ namespace NewsHeli
 		private ScriptSettings _ss;
 		private HeliController _heliCtrl;
 		private Keys _toggleCamKey;
+
+		// gamepad
+		private GTA.Control _gamepadModifier = GTA.Control.CharacterWheel;
+		private GTA.Control _gamepadActivate = GTA.Control.LookBehind;
 	}
 }
