@@ -74,8 +74,11 @@ namespace NewsHeli
 			if (_heliCtrl.isActive && Game.IsControlJustPressed(_gamepadActivate))
 			{
 				// toggle camera
-				if (Game.IsControlPressed(_gamepadModifier))
+				if (!_justActivated && Game.IsControlPressed(_gamepadModifier))
+				{
 					_heliCtrl.toggleHeliCam();
+					_justActivated = true;
+				}
 
 				// zoom control
 				else if (Game.IsControlPressed(GTA.Control.LookUpOnly))
@@ -83,6 +86,7 @@ namespace NewsHeli
 				else if (Game.IsControlPressed(GTA.Control.LookDownOnly))
 					_heliCtrl.zoomCamera(false);
 			}
+			else _justActivated = false;
 		}
 
 
@@ -121,5 +125,6 @@ namespace NewsHeli
 		// gamepad
 		private GTA.Control _gamepadModifier = GTA.Control.CharacterWheel;
 		private GTA.Control _gamepadActivate = GTA.Control.LookBehind;
+		private bool _justActivated = false;			// prevents double-tapping
 	}
 }
