@@ -1,8 +1,7 @@
 # News Helicopter
-
 Remember the news helicopters that spawned along with the police helicopters in GTA San Andreas? Me too. With this version, you can get access to the live camera feed from the news chopper.
 
-
+---
 ## Installation
 Move `NewsHeli.dll` and `NewsHeli.ini` to your `/scripts` directory
 
@@ -12,10 +11,23 @@ Move `NewsHeli.dll` and `NewsHeli.ini` to your `/scripts` directory
 - .NET Runtime 4.8
 - **recommended**: a helicopter with a news station livery, like [this one](https://www.gta5-mods.com/vehicles/buckingham-maverick-2nd-generation-add-on-liveries)
 
+---
 ## Usage
 The news heli will spawn automatically when you have 3 or more stars wanted level.  
+
+### Keyboard
 Press `[Enter]` (can be changed in INI) to toggle the news chopper camera feed.  
-Press `Ctrl` and `+` or `-` to zoom camera feed in/out, respectively. Same as zooming a web browser.
+Press `[Ctrl]` and `[+]` or `[-]` to zoom camera feed in/out, respectively. Same as zooming a web browser.
+
+### Gamepad
+*Note: these control combinations also apply to keyboard. They must be pressed in order (the same way you copy with Ctrl+C).*
+
+Function | Control | Default
+---|---|---
+toggle camera | `CharacterWheel` + `LookBehind` | `[DPad-down]` + `[RightStick-click]`
+zoom in | `LookUp` + `LookBehind` | `[RightStick-Up]` + `[RightStick-click]`
+zoom out | `LookDown` + `LookBehind` | `[RightStick-Down]` + `[RightStick-click]`
+
 
 ### Settings
 Setting | Function | Default
@@ -30,7 +42,7 @@ Setting | Function | Default
 `defaultFov` | Default field-of-view for the news chopper camera feed, in degrees | `60` degrees
 `zoomFactor` | Percentage to zoom camera by every time you press the zoom command | `10` %
 
-
+---
 ## Development
 [Source code - GitHub](https://github.com/DavidLiuGit/GTAV_NewsHelicopter)  
 [GTA5 Mods](https://www.gta5-mods.com/scripts/news-helicopter)
@@ -41,6 +53,9 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.2.0
+- implemented gamepad controls. See usage section for details
+- decreased pilot retasking rate to once per 5 seconds to prevent erratic flying
 #### 1.1.1
 - added error checking after spawning heli & crew
 - fixed a bug where the camera would not zoom after the heli is destroyed in rare cases
