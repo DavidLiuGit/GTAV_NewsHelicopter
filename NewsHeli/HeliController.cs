@@ -160,21 +160,21 @@ namespace NewsHeli
 		/// <summary>
 		/// Toggle between the gameplay camera and the news heli camera
 		/// </summary>
-		public void toggleHeliCam()
+		/// <returns>whether the news heli camera is rendering</returns>
+		public bool toggleHeliCam()
 		{
 			// sanity check: if no heli is active, stop execution
 			if (!isActive)
 			{
 				instanceDestructor();
 				if (_verbose) Notification.Show("while toggling heli cam, heli was NOT active");
-				return;
+				return false;
 			}
 
 			// if currently rendering from heli cam, then reset to gameplay cam
 			if (isRenderingFromHeliCam){
 				World.RenderingCamera = null;
 				isRenderingFromHeliCam = false;
-				
 			}
 
 			// if notcurrently rendering from heli cam, then set heli cam as active rendering cam
@@ -190,6 +190,8 @@ namespace NewsHeli
 				World.RenderingCamera = heliCam;
 				isRenderingFromHeliCam = true;
 			}
+
+			return isRenderingFromHeliCam;
 		}
 
 
