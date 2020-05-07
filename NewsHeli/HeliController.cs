@@ -28,7 +28,7 @@ namespace NewsHeli
 		private RelationshipGroup _newsRG;
 
 		// tasking
-		private const int _chaseRetaskTicks = 20;
+		private const int _chaseRetaskTicks = 50;
 		private int _tickCount = 0;
 
 		// Camera
@@ -174,6 +174,7 @@ namespace NewsHeli
 			if (isRenderingFromHeliCam){
 				World.RenderingCamera = null;
 				isRenderingFromHeliCam = false;
+				
 			}
 
 			// if notcurrently rendering from heli cam, then set heli cam as active rendering cam
