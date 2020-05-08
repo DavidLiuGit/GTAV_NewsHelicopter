@@ -24,7 +24,7 @@ namespace NewsHeli
 
 		// crew
 		public Ped activePilot;
-		private const PedHash _defaultPilotHash = PedHash.Beverly;
+		private const PedHash _defaultPilotHash = PedHash.ReporterCutscene;
 		private RelationshipGroup _newsRG;
 
 		// tasking
@@ -254,9 +254,10 @@ namespace NewsHeli
 		private void spawnAndConfigureHeliCrew()
 		{
 			activePilot = activeHeli.CreatePedOnSeat(VehicleSeat.Driver, _defaultPilotHash);
-			activePilot.RelationshipGroup = _newsRG;
 			if (activePilot == null)
 				Notification.Show("News Heli: ~r~Failed to spawn heli pilot " + _defaultPilotHash.ToString());
+
+			activePilot.RelationshipGroup = _newsRG;
 		}
 
 
