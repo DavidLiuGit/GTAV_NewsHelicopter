@@ -53,6 +53,9 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.2.1
+- updated error checking
+- reverted pilot to reporter only (no more Beverly)
 #### 1.2.0
 - implemented gamepad controls. See usage section for details
 - decreased pilot retasking rate to once per 5 seconds to prevent erratic flying
