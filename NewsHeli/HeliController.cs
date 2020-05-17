@@ -21,6 +21,8 @@ namespace NewsHeli
 		private Model _model;
 		private float _altitude;
 		private float _radius;
+		private int _respawnDelay;		// in milliseconds. Specify in seconds in .ini
+		private int _lastAliveTime;
 
 		// crew
 		public Ped activePilot;
@@ -53,9 +55,14 @@ namespace NewsHeli
 		{
 			readNewsHeliSettings(ss);
 			_model = (Model)Game.GenerateHash(_modelName);
+
+			// relationships
 			_newsRG = new RelationshipGroup(Game.GenerateHash("news_team")); //RelationshipGroup("news_team");
 			//_newsRG.SetRelationshipBetweenGroups(Game.Player.Character.RelationshipGroup, Relationship.Companion, true);
 			Game.Player.Character.RelationshipGroup.SetRelationshipBetweenGroups(_newsRG, Relationship.Like, true);
+
+			// default settings & flags
+			_lastAliveTime = int.MinValue;
 			isRenderingFromHeliCam = false;
 		}
 		#endregion
@@ -133,6 +140,8 @@ namespace NewsHeli
 		/// <param name="force">If destroying by force, assets are deleted immediately</param>
 		public void instanceDestructor(bool force = true)
 		{
+			_lastAliveTime = Game.GameTime;
+
 			// if destroying by force, delete everything right away
 			if (force)
 			{
@@ -220,6 +229,19 @@ namespace NewsHeli
 
 			return _currentFov;
 		}
+
+
+
+		/// <summary>
+		/// Determine whether enough time has elapsed since the heli was last active to spawn it again
+		/// </summary>
+		/// <returns><c>true</c> if enough time has elapsed</returns>
+		public bool canAutoSpawn()
+		{
+			if (Game.GameTime > _lastAliveTime + _respawnDelay)
+				return true;
+			else return false;
+		}
 		#endregion
 
 
@@ -237,6 +259,7 @@ namespace NewsHeli
 			_modelName = ss.GetValue<string>(section, "model", "frogger");
 			_radius = ss.GetValue<float>(section, "radius", 50f);
 			_altitude = ss.GetValue<float>(section, "altitude", 50f);
+			_respawnDelay = ss.GetValue<int>(section, "respawnDelay", 30) * 1000;
 
 			section = "HeliCam";
 			_defaultFov = ss.GetValue<float>(section, "defaultFov", 50f);
@@ -271,6 +294,9 @@ namespace NewsHeli
 			// task the activePilot with chasing the player
 			activePilot.Task.ChaseWithHelicopter(Game.Player.Character, Vector3.Zero.Around(_radius));
 			activePilot.AlwaysKeepTask = true;
+
+			// record last active time
+			_lastAliveTime = Game.GameTime;
 		}
 
 
