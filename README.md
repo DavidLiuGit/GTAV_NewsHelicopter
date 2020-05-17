@@ -37,6 +37,7 @@ Setting | Function | Default
 `model` | helicopter model to be spawned. You can use add-on model names | `frogger`
 `radius` | how far away the helicopter should follow the player from, in meters | `40` meters
 `altitude` | how high the helicopter should be above the player, in meters | `40` meters
+`respawnDelay` | time delay (in seconds) before the helicopter spawns again | `30` seconds
 **HeliCam**|
 `activateKey` | Key used to toggle the news chopper camera feed | `Enter` (return carriage)
 `defaultFov` | Default field-of-view for the news chopper camera feed, in degrees | `60` degrees
@@ -53,6 +54,8 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.3
+- implemented respawn delay; default 30 seconds
 #### 1.2.1
 - updated error checking
 - reverted pilot to reporter only (no more Beverly)
