@@ -61,7 +61,8 @@ namespace NewsHeli
 			// if no heli is active
 			else
 			{
-				if (_enabledOnWanted && Game.Player.WantedLevel >= 3)
+				// automatically spawn if player is wanted & heli can auto spawn
+				if (_enabledOnWanted && Game.Player.WantedLevel >= 3 && _heliCtrl.canAutoSpawn())
 				{
 					Vehicle heli = _heliCtrl.spawnMannedHeliInPursuit();
 					if (heli == null) _enabledOnWanted = false;
