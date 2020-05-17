@@ -44,6 +44,7 @@ namespace NewsHeli
 				_enabledOnWanted = _ss.GetValue<bool>("NewsHeli", "onWanted", true);
 				_heliCtrl = new HeliController(_ss);
 				_toggleCamKey = _ss.GetValue<Keys>("HeliCam", "activateKey", Keys.Return);
+				new CameraControl();
 			}
 
 			

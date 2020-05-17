@@ -187,6 +187,7 @@ namespace NewsHeli
 					if (_verbose) Notification.Show("while toggling heli cam, heli cam did not exist! Initializing now");
 				}
 
+				CameraControl.enableBreakingNewsOverlay(true);
 				World.RenderingCamera = heliCam;
 				isRenderingFromHeliCam = true;
 			}
