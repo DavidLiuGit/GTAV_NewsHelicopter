@@ -54,7 +54,9 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
-#### 1.3
+#### 1.4.0
+- heli will now spawn further away and fly in
+#### 1.3.0
 - implemented respawn delay; default 30 seconds
 #### 1.2.1
 - updated error checking
