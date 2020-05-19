@@ -23,6 +23,8 @@ namespace NewsHeli
 		private float _radius;
 		private int _respawnDelay;		// in milliseconds. Specify in seconds in .ini
 		private int _lastAliveTime;
+		private const float _spawnRadiusMultiplier = 8.0f;
+		private const float _spawnHeightMultiplier = 3.0f;
 
 		// crew
 		public Ped activePilot;
@@ -104,8 +106,8 @@ namespace NewsHeli
 		public Vehicle spawnMannedHeliInPursuit()
 		{
 			// determine a spawn position
-			Vector3 spawnPos = Game.Player.Character.Position.Around(_radius);
-			spawnPos.Z += _altitude;
+			Vector3 spawnPos = Game.Player.Character.Position.Around(_radius * _spawnRadiusMultiplier);
+			spawnPos.Z += _altitude * _spawnHeightMultiplier;
 
 			// spawn the heli & activePilot
 			activeHeli = World.CreateVehicle(_model, spawnPos);
@@ -186,7 +188,7 @@ namespace NewsHeli
 				isRenderingFromHeliCam = false;
 			}
 
-			// if notcurrently rendering from heli cam, then set heli cam as active rendering cam
+			// if not currently rendering from heli cam, then set heli cam as active rendering cam
 			else
 			{
 				// if heli cam does not exist (deleted for some reason), reinitialize it
