@@ -106,8 +106,10 @@ namespace NewsHeli
 		public Vehicle spawnMannedHeliInPursuit()
 		{
 			// determine a spawn position
-			Vector3 spawnPos = Game.Player.Character.Position.Around(_radius * _spawnRadiusMultiplier);
-			spawnPos.Z += _altitude * _spawnHeightMultiplier;
+			float spawnRadius = Math.Min(_radius * _spawnRadiusMultiplier, 400f);
+			float spawnHeight = Math.Min(_altitude * _spawnHeightMultiplier, 170f);
+			Vector3 spawnPos = Game.Player.Character.Position.Around(spawnRadius);
+			spawnPos.Z += spawnHeight;
 
 			// spawn the heli & activePilot
 			activeHeli = World.CreateVehicle(_model, spawnPos);
