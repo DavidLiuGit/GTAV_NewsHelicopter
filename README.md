@@ -40,8 +40,11 @@ Setting | Function | Default
 `respawnDelay` | time delay (in seconds) before the helicopter spawns again | `30` seconds
 **HeliCam**|
 `activateKey` | Key used to toggle the news chopper camera feed | `Enter` (return carriage)
-`defaultFov` | Default field-of-view for the news chopper camera feed, in degrees | `60` degrees
-`zoomFactor` | Percentage to zoom camera by every time you press the zoom command | `10` %
+`defaultFov` | Default field-of-view for the news chopper camera feed, in degrees | `35` degrees
+`zoomFactor` | Percentage to zoom camera by every time you press the zoom command | `20` %
+`showWeazelOverlay` | If true, show Weazel News overlay when news chopper camera feed is active | `true`
+`title` | Title to display on news overlay. If left blank, "Live Breaking News" is shown |
+`subtitle` | Subtitle to display on news overlay. If left blank, a subtitle is randomly chosen | 
 
 ---
 ## Development
@@ -54,6 +57,9 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.5.0
+- implemented Weazel News overlay
+- modified some default settings (FOV and zoom factor)
 #### 1.4.0
 - heli will now spawn further away and fly in
 #### 1.3.0
