@@ -238,6 +238,10 @@ namespace NewsHeli
 				_currentFov *= 1f - _zoomFactor;
 			else
 				_currentFov *= 1f + _zoomFactor;
+
+			// constrain FOV
+			if (_currentFov < 1.0f) _currentFov = 1.0f;
+			else if (_currentFov > 360f) _currentFov = 360f;
 			
 			// apply new camera fov
 			heliCam.FieldOfView = _currentFov;
