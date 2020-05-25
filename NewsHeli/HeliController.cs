@@ -32,7 +32,7 @@ namespace NewsHeli
 		private RelationshipGroup _newsRG;
 
 		// tasking
-		private const int _chaseRetaskTicks = 50;
+		private const int _chaseRetaskTicks = 2000;
 		private int _tickCount = 0;
 
 		// Camera
@@ -41,6 +41,9 @@ namespace NewsHeli
 		public Camera heliCam;
 		public bool isRenderingFromHeliCam;
 		private float _zoomFactor;
+		private bool _showScaleformOverlay;
+		private string _title;
+		private string _subtitle;
 
 		// debug
 		private bool _verbose = false;
@@ -93,6 +96,10 @@ namespace NewsHeli
 			if (_tickCount % _chaseRetaskTicks == 0)
 				taskPilotChasePlayer(activePilot);
 
+			// show breaking news Scaleform overlay when camera is active
+			if (this.isRenderingFromHeliCam && this._showScaleformOverlay)
+				CameraControl.enableBreakingNewsOverlay();
+
 			// increment tickCount
 			_tickCount++;
 		}
@@ -131,6 +138,10 @@ namespace NewsHeli
 
 			// create the camera attached to the heli
 			heliCam = initializeHeliCamera(activeHeli);
+
+			// update news overlay text; if no subtitle was set, a random subtitle will be shown every time
+			if (_showScaleformOverlay)
+				CameraControl.updateNewsText(_title, _subtitle);
 
 			isActive = true;
 			return activeHeli;
@@ -200,6 +211,7 @@ namespace NewsHeli
 					if (_verbose) Notification.Show("while toggling heli cam, heli cam did not exist! Initializing now");
 				}
 
+				CameraControl.enableBreakingNewsOverlay(true);
 				World.RenderingCamera = heliCam;
 				isRenderingFromHeliCam = true;
 			}
@@ -268,6 +280,9 @@ namespace NewsHeli
 			section = "HeliCam";
 			_defaultFov = ss.GetValue<float>(section, "defaultFov", 50f);
 			_zoomFactor = ss.GetValue<float>(section, "zoomFactor", 10f) / 100f;
+			_showScaleformOverlay = ss.GetValue<bool>(section, "showWeazelOverlay", true);
+			_title = ss.GetValue<string>(section, "title", "");
+			_subtitle = ss.GetValue<string>(section, "subtitle", "");
 
 			section = "debug";
 			_verbose = ss.GetValue<bool>(section, "verbose", false);
