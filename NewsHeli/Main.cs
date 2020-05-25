@@ -26,7 +26,7 @@ namespace NewsHeli
 		{
 			Tick += onTick;
 			KeyDown += onKeyDown;
-			Interval = 99;
+			Interval = 5;
 			Aborted += onAbort;
 		}
 
