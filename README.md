@@ -57,6 +57,8 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.5.1
+- Weazel News overlay will now show "Signal Lost" if heli is destroyed
 #### 1.5.0
 - implemented Weazel News overlay
 - modified some default settings (FOV and zoom factor)
