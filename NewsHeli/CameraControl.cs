@@ -16,6 +16,8 @@ namespace NewsHeli
 		#region properties
 		private static Scaleform _newsScaleform;
 		private static Random rng = new Random();
+
+		private static bool showingStatic = false;
 		#endregion
 
 
@@ -27,7 +29,6 @@ namespace NewsHeli
 			"Safety meeting ends after 5 injured",
 			"China admits to using ocean to hide submarines",
 			"Drugs win War on Drugs",
-			//"Alcoholic father disappointed in pothead son",
 			"Prisoner expected to be raped more often",
 			"Pope forgives molested children",
 			"Gay teen worried he might be Christian",
@@ -43,6 +44,8 @@ namespace NewsHeli
 		}
 
 
+
+		#region overlay
 		public static void enableBreakingNewsOverlay(bool enable = true)
 		{
 			if (enable)
@@ -64,8 +67,20 @@ namespace NewsHeli
 
 
 		public static void showStatic(int type = 1) {
-			_newsScaleform.CallFunction("SHOW_STATIC", type);
+			if (type == -1)
+			{
+				showingStatic = false;
+				_newsScaleform.CallFunction("SHOW_STATIC", -1);
+			}
+
+			else if (!showingStatic)
+			{
+				showingStatic = true;
+				_newsScaleform.CallFunction("SHOW_STATIC", type);
+			}
+
 		}
+		#endregion
 	}
 }
 	
