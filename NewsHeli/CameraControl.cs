@@ -67,15 +67,15 @@ namespace NewsHeli
 
 
 		public static void showStatic(int type = 1) {
-
-			if (type == 0 && showingStatic)
+			if (type == -1 && showingStatic)
 			{
 				showingStatic = false;
-				_newsScaleform.CallFunction("SHOW_STATIC", 0);
+				_newsScaleform.CallFunction("SHOW_STATIC", -1);
 			}
 
 			else if (!showingStatic)
 			{
+				GTA.UI.Screen.ShowHelpTextThisFrame("enabling static");
 				showingStatic = true;
 				_newsScaleform.CallFunction("SHOW_STATIC", type);
 			}

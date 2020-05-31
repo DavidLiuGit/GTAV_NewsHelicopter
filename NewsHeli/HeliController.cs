@@ -25,6 +25,7 @@ namespace NewsHeli
 		private int _lastAliveTime;
 		private const float _spawnRadiusMultiplier = 8.0f;
 		private const float _spawnHeightMultiplier = 3.0f;
+		private const int _staticFeedDuration = 4000;	// (in milliseconds) duration to show static if heli inoperable
 
 		// crew
 		public Ped activePilot;
@@ -85,10 +86,15 @@ namespace NewsHeli
 			if (!isActive)
 				return;
 
+			// show breaking news Scaleform overlay when camera is active
+			if (this.isRenderingFromHeliCam && this._showScaleformOverlay)
+				CameraControl.enableBreakingNewsOverlay();
+
 			// if the heli is no longer operable, destroy gracefully
 			if (!isHeliOperable(activeHeli))
 			{
-				instanceDestructor(false);
+				//instanceDestructor(false);
+				heliDestroyedHandler();
 				return;
 			}
 
@@ -96,12 +102,11 @@ namespace NewsHeli
 			if (_tickCount % _chaseRetaskTicks == 0)
 				taskPilotChasePlayer(activePilot);
 
-			// show breaking news Scaleform overlay when camera is active
-			if (this.isRenderingFromHeliCam && this._showScaleformOverlay)
-				CameraControl.enableBreakingNewsOverlay();
-
 			// increment tickCount
 			_tickCount++;
+
+			// record last active time
+			_lastAliveTime = Game.GameTime;
 		}
 
 
@@ -139,9 +144,12 @@ namespace NewsHeli
 			// create the camera attached to the heli
 			heliCam = initializeHeliCamera(activeHeli);
 
-			// update news overlay text; if no subtitle was set, a random subtitle will be shown every time
+			// update news overlay
 			if (_showScaleformOverlay)
-				CameraControl.updateNewsText(_title, _subtitle);
+			{
+				CameraControl.updateNewsText(_title, _subtitle);	// if no subtitle set, a random subtitle is chosen
+				CameraControl.showStatic(-1);						// disable static feed
+			}
 
 			isActive = true;
 			return activeHeli;
@@ -177,6 +185,24 @@ namespace NewsHeli
 			isRenderingFromHeliCam = false;
 			World.RenderingCamera = null;		// reset rendering cam to gameplay cam
 			isActive = false;
+		}
+
+
+
+		/// <summary>
+		/// When the heli is rendered inoperable, gracefully destroy. 
+		/// </summary>
+		private void heliDestroyedHandler()
+		{
+			// determine if instance destructor should be called
+			if (Game.GameTime > _staticFeedDuration + _lastAliveTime)
+			{
+				instanceDestructor(false);
+				return;
+			}
+
+			// show static
+			CameraControl.showStatic(1);
 		}
 
 
@@ -317,9 +343,6 @@ namespace NewsHeli
 			// task the activePilot with chasing the player
 			activePilot.Task.ChaseWithHelicopter(Game.Player.Character, Vector3.Zero.Around(_radius));
 			activePilot.AlwaysKeepTask = true;
-
-			// record last active time
-			_lastAliveTime = Game.GameTime;
 		}
 
 
