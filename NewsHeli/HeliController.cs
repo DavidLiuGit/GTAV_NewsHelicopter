@@ -25,7 +25,7 @@ namespace NewsHeli
 		private int _lastAliveTime;
 		private const float _spawnRadiusMultiplier = 8.0f;
 		private const float _spawnHeightMultiplier = 3.0f;
-		private const int _staticFeedDuration = 4000;	// (in milliseconds) duration to show static if heli inoperable
+		private const int _staticFeedDuration = 6500;	// (in milliseconds) duration to show static if heli inoperable
 
 		// crew
 		public Ped activePilot;
