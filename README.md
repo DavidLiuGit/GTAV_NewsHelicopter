@@ -38,6 +38,7 @@ Setting | Function | Default
 `radius` | how far away the helicopter should follow the player from, in meters | `40` meters
 `altitude` | how high the helicopter should be above the player, in meters | `40` meters
 `respawnDelay` | time delay (in seconds) before the helicopter spawns again | `30` seconds
+`minWantedLevel` | wanted level at which news chopper spawns | `2`
 **HeliCam**|
 `activateKey` | Key used to toggle the news chopper camera feed | `Enter` (return carriage)
 `defaultFov` | Default field-of-view for the news chopper camera feed, in degrees | `35` degrees
@@ -57,6 +58,8 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.5.2
+- added option to change wanted level needed for news heli to spawn
 #### 1.5.1
 - Weazel News overlay will now show "Signal Lost" if heli is destroyed
 #### 1.5.0
