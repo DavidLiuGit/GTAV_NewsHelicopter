@@ -41,6 +41,7 @@ namespace NewsHeli
 
 				// initialization
 				_ss = base.Settings;
+				_minimumWantedLevel = _ss.GetValue<int>("Newsheli", "minWantedLevel", 3);
 				_enabledOnWanted = _ss.GetValue<bool>("NewsHeli", "onWanted", true);
 				_heliCtrl = new HeliController(_ss);
 				_toggleCamKey = _ss.GetValue<Keys>("HeliCam", "activateKey", Keys.Return);
@@ -53,7 +54,7 @@ namespace NewsHeli
 			{
 				if (_enabledOnWanted)
 				{
-					if (Game.Player.WantedLevel >= 3)
+					if (Game.Player.WantedLevel >= _minimumWantedLevel)
 						_heliCtrl.onTick();
 					else _heliCtrl.instanceDestructor(false);	// if player has less than 3 stars, dismiss active heli
 				}
@@ -63,7 +64,7 @@ namespace NewsHeli
 			else
 			{
 				// automatically spawn if player is wanted & heli can auto spawn
-				if (_enabledOnWanted && Game.Player.WantedLevel >= 3 && _heliCtrl.canAutoSpawn())
+				if (_enabledOnWanted && Game.Player.WantedLevel >= _minimumWantedLevel && _heliCtrl.canAutoSpawn())
 				{
 					Vehicle heli = _heliCtrl.spawnMannedHeliInPursuit();
 					if (heli == null) _enabledOnWanted = false;
@@ -123,6 +124,7 @@ namespace NewsHeli
 		private ScriptSettings _ss;
 		private HeliController _heliCtrl;
 		private Keys _toggleCamKey;
+		private int _minimumWantedLevel = 3;
 
 		// gamepad
 		private GTA.Control _gamepadModifier = GTA.Control.CharacterWheel;
