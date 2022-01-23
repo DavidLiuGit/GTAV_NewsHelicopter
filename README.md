@@ -58,6 +58,8 @@ Setting | Function | Default
 - community suggestions!
 
 ### Changelog
+#### 1.5.3
+- more headlines
 #### 1.5.2
 - added option to change wanted level needed for news heli to spawn
 #### 1.5.1

@@ -33,6 +33,18 @@ namespace NewsHeli
 			"Pope forgives molested children",
 			"Gay teen worried he might be Christian",
 			"Poll: majority of Americans approve of sending Congress to Syria",
+			"More at 11: lies men will tell you to sleep with you",
+			"Nauseatingly precious Liberty City couple spotted walking in rain",
+			"Vice City doctor not sure why he has a gay cult following",
+			"God answers prayers of paralyzed boy: 'Nah.'",
+			"Terrorists win War on Terror",
+			"San Fierro Zoo lays off 500 animals amid recession",
+			"Local man regrets accidentally clicking 'I Am Under 18' on favorite porn site",
+			"Desperate, hungry vegetarians declare cows plants",
+			"Jihadists surprised to find out virgins are actually nerds",
+			"Ohio will be eliminated",
+			"LifeInvader office invaded by no-lifes",
+			"Find out if your baby is too annoying to love",
 		};
 		#endregion
 
