@@ -106,7 +106,7 @@ namespace NewsHeli
 				{
 					if (e.KeyCode == Keys.Oemplus)
 						_heliCtrl.zoomCamera(true);
-					else if (e.KeyCode == Keys.OemMinus)
+					else if (e.KeyCode == Keys.OemMinus || e.KeyCode == Keys.Oem6)
 						_heliCtrl.zoomCamera(false);
 				}
 			}
